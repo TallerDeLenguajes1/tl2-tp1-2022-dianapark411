@@ -9,6 +9,16 @@ public class Empleado{
     private double sueldoBasico;
     private double salario;
 
+    //otra informacion
+    private bool esCasado;
+    private int cantHijos;
+    private bool esDivorciado;
+    private DateTime fechaDivorcio;
+    private bool tieneTituloUniversitario;
+    private string titulo;
+    private string universidad;
+
+
 
     public string Nombre { get => nombre; set => nombre = value; }
     public long Dni {get;set;}
@@ -17,17 +27,31 @@ public class Empleado{
     public string Direccion {get;set;}
     public double SueldoBasico { get => sueldoBasico; set => sueldoBasico = value; }
     public double Salario { get => salario; set => salario = value; }
+    public bool EsCasado { get => esCasado; set => esCasado = value; }
+    public int CantHijos { get => cantHijos; set => cantHijos = value; }
+    public bool EsDivorciado { get => esDivorciado; set => esDivorciado = value; }
+    public bool TieneTituloUniversitario { get => tieneTituloUniversitario; set => tieneTituloUniversitario = value; }
+    public string Titulo { get => titulo; set => titulo = value; }
+    public DateTime FechaDivorcio { get => fechaDivorcio; set => fechaDivorcio = value; }
+    public string Universidad { get => universidad; set => universidad = value; }
 
     public Empleado(){
         Random random = new Random();
         //Inicializo a mano para no perder tiempo
-        Nombre = "Ana";
-        Dni = 25000000;
-        FechaNacimiento = new DateTime(1974, 1, 1); 
-        FechaIngreso = new DateTime(2009,3,26);
-        Direccion = "Mate de Luna 1000";
+        Nombre = "Nombre empleado";
+        Dni = 10000000;
+        FechaNacimiento = RandomDay(); 
+        FechaIngreso = RandomDay(FechaNacimiento.Year + 16); // para que por lo menos tengan 16 años cuando empiecen a trabajar jejj
+        Direccion = "Direccion empleado";
         SueldoBasico = random.Next(20000,100000);
         Salario = calcularSalario(); 
+        EsCasado = false;
+        CantHijos = 0;
+        EsDivorciado = false;
+        FechaDivorcio = new DateTime(1900,1,1);
+        TieneTituloUniversitario = true;
+        Titulo = "Titulo";
+        Universidad = "Universidad";
     }
 
     private DateTime fechaActual = DateTime.Today;
@@ -65,15 +89,50 @@ public class Empleado{
     public void mostrarUnEmpleado(Empleado emp){
         Console.WriteLine("\n--------DATOS DEL EMPLEADO--------");
         Console.WriteLine($"Nombre: {emp.Nombre}");
-        Console.WriteLine($"DNI: {emp.Dni}");
-        Console.WriteLine($"Fecha de nacimiento: {emp.FechaNacimiento.ToShortDateString()}");
         Console.WriteLine($"Edad: {emp.calcularEdad()}");
-        Console.WriteLine($"Direccion: {emp.Direccion}");
-        Console.WriteLine($"Fecha de ingreso a la empresa: {emp.FechaIngreso.ToShortDateString()}");
         Console.WriteLine($"Antiguedad: {emp.calcularAntiguedad()}");
-        Console.WriteLine($"Sueldo Basico: {emp.SueldoBasico}");
-        Console.WriteLine($"Descuento: {emp.calcularDescuento()}");
-        Console.WriteLine($"Adicional: {emp.calcularAdicional()}");
         Console.WriteLine($"Salario: {emp.Salario}");
     }
+
+    public bool get_esCasado(){
+        return esCasado;
+    }
+
+    public int get_cantHijos(){
+        return cantHijos;
+    }
+
+    public bool get_esDivorciado(){
+       return esDivorciado;
+    }
+
+    public DateTime get_fechaDivorcio(){
+        return fechaDivorcio;
+    }
+
+    public bool get_tieneTituloUniversitario(){
+        return tieneTituloUniversitario;
+    }
+
+    public string get_titulo(){
+        return titulo;
+    }
+    public string get_universidad(){
+        return Universidad;
+    }
+
+    public DateTime RandomDay(int anio_inicio = 1930) {
+        DateTime start = new DateTime(anio_inicio, 1, 1); 
+        Random gen = new Random(); 
+        try{
+            int range = (DateTime.Today - start).Days; 
+            return start.AddDays(gen.Next(range)); 
+        }catch(System.Exception ex){
+            var msj = "Error message: " + ex.Message;
+            Console.WriteLine(msj);
+            return new DateTime(1,1,1);
+        }
+        
+    }
+    
 }
