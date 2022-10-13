@@ -38,20 +38,32 @@ public class Empleado{
     public Empleado(){
         Random random = new Random();
         //Inicializo a mano para no perder tiempo
-        Nombre = "Nombre empleado";
-        Dni = 10000000;
+        Nombre = CrearNombre();
+        Dni = random.Next(1000000,60000000);
         FechaNacimiento = RandomDay(); 
-        FechaIngreso = RandomDay(FechaNacimiento.Year + 16); // para que por lo menos tengan 16 años cuando empiecen a trabajar jejj
+        FechaIngreso = RandomDay(FechaNacimiento.Year + 16, fechaActual.Year); // para que por lo menos tengan 16 años cuando empiecen a trabajar jejj
         Direccion = "Direccion empleado";
         SueldoBasico = random.Next(20000,100000);
         Salario = calcularSalario(); 
-        EsCasado = false;
-        CantHijos = 0;
-        EsDivorciado = false;
-        FechaDivorcio = new DateTime(1900,1,1);
-        TieneTituloUniversitario = true;
-        Titulo = "Titulo";
-        Universidad = "Universidad";
+        EsCasado = Convert.ToBoolean(random.Next(0,2));
+        CantHijos = random.Next(0,5);
+        if(esCasado == false){
+            esDivorciado = false;
+            FechaDivorcio = new DateTime(9999,9,9); //seria como un indefinido
+        }else{
+            EsDivorciado = Convert.ToBoolean(random.Next(0,2));
+            FechaDivorcio = RandomDay(FechaNacimiento.Year + 20, fechaActual.Year); // para que no se case y divorcie antes de los 20
+        }
+        
+        TieneTituloUniversitario = Convert.ToBoolean(random.Next(0,2));
+        if(tieneTituloUniversitario == true){
+            Titulo = "Titulo";
+            Universidad = "UNT";
+        }else{
+            Titulo = "No tiene titulo";
+            Universidad = "-";
+        }
+        
     }
 
     private DateTime fechaActual = DateTime.Today;
@@ -63,7 +75,19 @@ public class Empleado{
         }
         return edad;
     }
-    
+    public string CrearNombre(){ 
+        Random r = new Random();
+        string[] nombres = { "Lucia ", "Jose ", "Maria ", "Pedro ", "Martina ", "Lucas ", "Romina"};
+        string[] apellidos = { "Gomez", "Perez", "Fernandez", "Juarez", "Martinez"};
+        
+        string name = "";
+        
+        name = nombres[r.Next(0, nombres.Length - 1)];
+        name += apellidos[r.Next(0, apellidos.Length - 1)];
+
+        return name;
+    }
+
     public int calcularAntiguedad(){
         int antiguedad = 0;
         antiguedad = fechaActual.Year - FechaIngreso.Year;
@@ -94,45 +118,34 @@ public class Empleado{
         Console.WriteLine($"Salario: {emp.Salario}");
     }
 
-    public bool get_esCasado(){
-        return esCasado;
+    public void mostrarInfoAdicional(Empleado emp){
+        Console.WriteLine("\n--------MAS INFORMACION--------");
+        Console.WriteLine($"Es casado: {emp.esCasado}");
+        Console.WriteLine($"Cantidad de hijos: {emp.cantHijos}");
+        Console.WriteLine($"Es divorciado: {emp.esDivorciado}");
+        if(esDivorciado == true){
+            Console.WriteLine($"Fecha divorcio: {emp.fechaDivorcio}");
+        }
+        Console.WriteLine($"Tiene titulo universitario: {emp.tieneTituloUniversitario}");
+        if(tieneTituloUniversitario == true){
+            Console.WriteLine($"Titulo: {emp.titulo}");
+            Console.WriteLine($"Universidad: {emp.universidad}");
+        }
     }
 
-    public int get_cantHijos(){
-        return cantHijos;
-    }
 
-    public bool get_esDivorciado(){
-       return esDivorciado;
-    }
-
-    public DateTime get_fechaDivorcio(){
-        return fechaDivorcio;
-    }
-
-    public bool get_tieneTituloUniversitario(){
-        return tieneTituloUniversitario;
-    }
-
-    public string get_titulo(){
-        return titulo;
-    }
-    public string get_universidad(){
-        return Universidad;
-    }
-
-    public DateTime RandomDay(int anio_inicio = 1930) {
+    public DateTime RandomDay(int anio_inicio = 1930, int anio_fin = 2005) {
         DateTime start = new DateTime(anio_inicio, 1, 1); 
+        DateTime end = new DateTime(anio_fin, 1, 1); 
         Random gen = new Random(); 
         try{
-            int range = (DateTime.Today - start).Days; 
+            int range = (end - start).Days; 
             return start.AddDays(gen.Next(range)); 
-        }catch(System.Exception ex){
-            var msj = "Error message: " + ex.Message;
-            Console.WriteLine(msj);
-            return new DateTime(1,1,1);
+        }catch(Exception ex){
+            Console.WriteLine("Error message: " + ex.Message);
+            Console.WriteLine("Fecha actual por defecto");
+            return DateTime.Today;
         }
-        
     }
     
 }

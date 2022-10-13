@@ -10,14 +10,10 @@ List<Empleado> list_empleados = new List<Empleado>();
 
 for (int i = 0; i < n; i++)
 {
-    System.Console.WriteLine($"Ingrese el nombre del empleado {i+1}: ");
-    string nombre = Console.ReadLine();
-    System.Console.WriteLine($"Ingrese el DNI del empleado {i+1}: ");
-    long dni = Convert.ToInt64(Console.ReadLine());
     System.Console.WriteLine($"Ingrese la direccion del empleado {i+1}: ");
     string direccion = Console.ReadLine();
 
-    list_empleados.Insert(i, new Empleado(){ Nombre = nombre, Dni = dni, Direccion = direccion} );
+    list_empleados.Insert(i, new Empleado(){ Direccion = direccion} );
 
 }
 
@@ -25,6 +21,7 @@ for (int i = 0; i < n; i++)
 for (int i = 0; i < n; i++)
 {
     list_empleados[i].mostrarUnEmpleado(list_empleados[i]);
+    list_empleados[i].mostrarInfoAdicional(list_empleados[i]);
     
 }
 
